@@ -21,12 +21,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    userName: {
-        type: String
-    },
+  
     profilePicture: {
         type: String,
-        default: 'https://mir-s3-cdn-cf.behance.net/projects/404/3278b4138283011.Y3JvcCwxOTIwLDE1MDEsMCw2ODk.jpg'
+        default: 'https://emamo.com/storage/avatars/2f/fd/180247_59678437f52bf2520aa722a4c49f2ffd.jpg'
     },
     follow: [{
         id: {
@@ -35,9 +33,6 @@ const userSchema = new Schema({
         profilePicture: {
             type: String
         },
-        userName: {
-            type: String
-        }
     }],
     follower: [{
         id: {
@@ -46,11 +41,9 @@ const userSchema = new Schema({
         profilePicture: {
             type: String
         },
-        userName: {
-            type: String
-        }
+        
     }],
-    favoriteSong:[]
+    favoriteSong: []
 }, { collection: 'User' })
 
 
@@ -76,7 +69,20 @@ const songSchema = new Schema({
     imageName: {
         type: String
     }
-},{collection:'Song'})
+}, { collection: 'Song' })
+
+
+const albumSchema = new Schema({
+    albumName: {
+        type: String
+    },
+    albumImage: {
+        type: String
+    },
+    albumCategory: {
+        type: String
+    }
+}, { collection: 'Album' })
 
 
 userSchema.methods.generateToken = async function () {
@@ -84,11 +90,11 @@ userSchema.methods.generateToken = async function () {
     const token = await jwt.sign({ _id: loggedUser._id, profilePicture: loggedUser.profilePicture }, 'n077o#2PANv*')
     return token
 }
-userSchema.statics.login = async (userName, password) => {
-    const user = await User.findOne({ userName })
+userSchema.statics.login = async (email, password) => {
+    const user = await User.findOne({ email })
     if (!user) {
 
-        throw createError(400, "Girilen Bilgilere Ait Kullanıcı Bulunamadi")
+        throw createError(400, "Giril   en Bilgilere Ait Kullanıcı Bulunamadi")
 
     }
     const checkPassword = await bcrypt.compare(password, user.password)
@@ -103,5 +109,6 @@ userSchema.statics.login = async (userName, password) => {
 
 const User = mongoose.model('User', userSchema)
 const Song = mongoose.model('Song', songSchema)
+const Album = mongoose.model('Album', albumSchema)
 
-module.exports = {User,Song}
+module.exports = { User, Song, Album }
