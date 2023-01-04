@@ -94,7 +94,7 @@ userSchema.statics.login = async (email, password) => {
     const user = await User.findOne({ email })
     if (!user) {
 
-        throw createError(400, "Giril   en Bilgilere Ait Kullanıcı Bulunamadi")
+        throw createError(400, "No User Found for the Entered Information")
 
     }
     const checkPassword = await bcrypt.compare(password, user.password)
@@ -102,7 +102,7 @@ userSchema.statics.login = async (email, password) => {
         return user
     }
     else {
-        throw createError(400, "Girilen Bilgilere Ait Kullanıcı Bulunamadi")
+        throw createError(400, "No User Found for the Entered Information")
     }
 }
 
