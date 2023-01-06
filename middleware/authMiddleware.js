@@ -1,10 +1,13 @@
 const jwt = require('jsonwebtoken')
 const { User, Video } = require('../models/userModels')
+const dotenv = require('dotenv');
+dotenv.config()
+
 const auth = async (req, res, next) => {
     try {
         if (req.header('Authorization')) {
             const token = req.header('Authorization').replace('Bearer ', '')
-            const sonuc = jwt.verify(token, 'n077o#2PANv*')
+            const sonuc = jwt.verify(token, process.env.JWT_TOKEN)
             const bulunanUser = await User.findOne({ _id: sonuc._id })
             if (bulunanUser) {
                 req.user = bulunanUser

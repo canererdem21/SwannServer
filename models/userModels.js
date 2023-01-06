@@ -3,7 +3,8 @@ const Schema = mongoose.Schema
 const createError = require('http-errors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
+const dotenv = require('dotenv');
+dotenv.config()
 const userSchema = new Schema({
     name: {
         type: String,
@@ -21,7 +22,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-  
+
     profilePicture: {
         type: String,
         default: 'https://emamo.com/storage/avatars/2f/fd/180247_59678437f52bf2520aa722a4c49f2ffd.jpg'
@@ -41,7 +42,7 @@ const userSchema = new Schema({
         profilePicture: {
             type: String
         },
-        
+
     }],
     favoriteSong: []
 }, { collection: 'User' })
@@ -87,7 +88,7 @@ const albumSchema = new Schema({
 
 userSchema.methods.generateToken = async function () {
     const loggedUser = this
-    const token = await jwt.sign({ _id: loggedUser._id, profilePicture: loggedUser.profilePicture }, 'n077o#2PANv*')
+    const token = await jwt.sign({ _id: loggedUser._id, profilePicture: loggedUser.profilePicture }, process.env.JWT_TOKEN)
     return token
 }
 userSchema.statics.login = async (email, password) => {
